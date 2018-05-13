@@ -2,6 +2,7 @@
 # Function names are self-explanatory
 
 import json
+import pickle
 
 __author__ = 'Sandipan Sikdar'
 
@@ -53,7 +54,20 @@ def displayTransactions(block_num):
 	else:
 		for i in range(len(trans)):
 			for key in trans[i]:
-				print(key+": "+str(trans[i][key]))	
+				print(key+": "+str(trans[i][key]))
+
+def retrieveTransactionAccount(a): #list of tuples
+	fs = open("transactions.pickle",'rb')
+	trans = pickle.load(fs)
+	if a in trans[a[0]][a[1]][a[2]]:
+		if len(trans[a[0]][a[1]][a[2]][a])>0:
+			return trans[a[0]][a[1]][a[2]][a]
+		else:
+			print("no transactions on this account")
+			return None
+	else:
+		print("no such account present")
+		return None
 
 if __name__=="__main__":
 	retrieveBlock(409912)
