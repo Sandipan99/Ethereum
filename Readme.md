@@ -28,4 +28,4 @@ Here I have jotted down different aspects the ethereum block chain ---
 		2.3.2. "retrieve.py" defines several functions (the names are self explanatory) for retrieving informations related to a particular block. I plan to enrich it with more functions.
 
 		2.3.3. "transactions.py" creates a csv file which lists all the transactions across all the blocks including mining rewards.
-		 
+		2.3.4. Separately stored the uncle rewards.. 
