@@ -3,6 +3,7 @@
 
 import json
 import pickle
+import pandas as pd
 
 __author__ = 'Sandipan Sikdar'
 
@@ -56,18 +57,12 @@ def displayTransactions(block_num):
 			for key in trans[i]:
 				print(key+": "+str(trans[i][key]))
 
-def retrieveTransactionAccount(a): #list of tuples
-	fs = open("transactions.pickle",'rb')
-	trans = pickle.load(fs)
-	if a in trans[a[0]][a[1]][a[2]]:
-		if len(trans[a[0]][a[1]][a[2]][a])>0:
-			return trans[a[0]][a[1]][a[2]][a]
-		else:
-			print("no transactions on this account")
-			return None
-	else:
-		print("no such account present")
-		return None
+def retrieveTransactionAccount(a): #returns a data frame
+	trans = pd.read_csv("transaction.csv")
+	df1 = trans['from' == a]
+	df2 = trans['to' == a]
+	return trans[df1 | df2]
 
 if __name__=="__main__":
-	retrieveBlock(409912)
+	#print(retrieveTransactionAccount('0000000000000000000000000000000000000000'))
+	print(displayBlock(0))

@@ -2,11 +2,12 @@
 #input - account_id and output- list of transactions
 
 import json
+import pickle
+import pandas as pd
 
 __author__ = 'Sandipan Sikdar'
 
-transactions = {}
-
+'''
 def insert_trans_account(from_add, to_add, value, time, stat):
     if from_add[0] not in transactions:
         transactions[from_add[0]] = {}
@@ -42,20 +43,30 @@ def insert_mining_reward(miner, reward, time, stat):
         transactions[miner[0]][miner[1]][miner[2]][miner] = [(stat,time,reward)]
     else:
         transactions[miner[0]][miner[1]][miner[2]][miner].append((stat,time,reward))
+'''
+
+ft = open("transaction.csv","w")
+ft.write("from,to,value,time,block")
+ft.write("\n")
+ft.close()
 
 def append_transaction(data):
-    for obj in data['transactions']:
-        from_add = obj['from account']
-        to_add = obj['to account']
-        value = obj['value']
-        time = data['time']
-        insert_trans_account(from_add, to_add, value, time, 1)
-        insert_trans_account(to_add, from_add, value, time, 0)
+    with open("transaction.csv","a") as ft:
+        for obj in data['transactions']:
+            ft.write(str(obj['from account'])+","+str(obj['to account'])+","+str(obj['value'])+","+str(data['time'])+","+str(data['number']))
+            ft.write("\n")
+
+
+
+def insert_mining_reward(data):
+    with open("transaction.csv","a") as ft:
+        ft.write("ethereum"+","+data['miner'][2:].lower()+","+str(data['reward'])+","+str(data['time'])+","+str(data['number']))
+        ft.write("\n")
 
 def extract_info(*argv):
-    fname = ''
+    fname = 'blocks/'
     for arg in argv:
-        fname+=str(i)+'/'
+        fname+=str(arg)+'/'
     fname+='blocks'
     try:
         with open(fname) as fs:
@@ -63,13 +74,18 @@ def extract_info(*argv):
                 data = json.loads(line.strip())
                 if data['transaction count'] > 0:
                     append_transaction(data)
-                insert_mining_reward(data['miner'][2:].lower(), data['reward'], time, 2)
+                insert_mining_reward(data)
     except:
         print("no such file")
 
-for i in range(10):
+extract_info(0)
+for i in range(1,10):
     extract_info(i)
+    print ("finished parsing block at: ",i)
     for j in range(10):
         extract_info(i,j)
+        print ("finished parsing block at: ",i,j)
         for k in range(10):
             extract_info(i,j,k)
+            print ("finished parsing block at: ",i,j,k)
+            
