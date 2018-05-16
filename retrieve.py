@@ -63,6 +63,11 @@ def retrieveTransactionAccount(a): #returns a data frame
 	df2 = trans['to' == a]
 	return trans[df1 | df2]
 
+def retrieveTransactionAccount(a,time):
+	t = retrieveTransactionAccount(a)
+	return t[t['time'] < time]
+
+
 if __name__=="__main__":
 	#print(retrieveTransactionAccount('0000000000000000000000000000000000000000'))
 	print(displayBlock(0))
