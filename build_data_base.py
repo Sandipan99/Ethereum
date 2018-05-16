@@ -75,7 +75,25 @@ def getBlockInformation(start_block):
 			block_iterator-=1
 		start_block-=1
 		#time.sleep(120)
+def calculate_reward(block,number):
+	sum_ = 0
+	for b in block:
+		sum_+= (b+8-number)/8
 
+	if number>4369999:
+		sum_*=	3000000000000000000
+	else:
+		sum_*=	5000000000000000000
+	return sum_		
+
+
+def getUncleRewards(start,f_name):
+	with open(f_name,"w") as ft:
+		block = w3.eth.getBlock(block_iterator)
+		if len(block['uncle'])>0:
+			u_r = calculate_reward(block['uncle'], block['number'])
+			ft.write("ethereum"+","+block['miner'][2:].lower()+","+str(u_r)+","+str(block['time'])+","+str(block['number']))
+			ft.write("\n")
 
 if __name__=="__main__":
 	#getBlockInformation(1)
