@@ -84,24 +84,47 @@ def calculate_reward(block,number):
 		sum_*=	3000000000000000000
 	else:
 		sum_*=	5000000000000000000
-	return sum_		
+	return sum_
 
 
-def getUncleRewards(start,f_name):
+def getUncleRewards(start,end,f_name):
 	with open(f_name,"w") as ft:
-		block = w3.eth.getBlock(block_iterator)
-		if len(block['uncle'])>0:
-			u_r = calculate_reward(block['uncle'], block['number'])
-			ft.write("ethereum"+","+block['miner'][2:].lower()+","+str(u_r)+","+str(block['time'])+","+str(block['number']))
-			ft.write("\n")
+		b_i = start
+		while b_i<=end:
+			block = w3.eth.getBlock(b_i)
+			if len(block['uncle'])>0:
+				u_r = calculate_reward(block['uncle'], block['number'])
+				ft.write("ethereum"+","+block['miner'][2:].lower()+","+str(u_r)+","+str(block['time'])+","+str(block['number']))
+				ft.write("\n")
+
+def findBlockUncle(start,end,f_name):
+	with open(f_name,"w") as ft:
+		b_i = start
+		while b_i<=end:
+			block = w3.eth.getBlock(b_i)
+			if len(block['uncles'])>0:
+				str_ = str(b_i)+","+block['miner'][2:].lower()
+				for obj in block['uncles']:
+					h = convert_string(obj)
+					h.lower()
+					str_+=","+h
+				ft.write(str_)
+				ft.write("\n")
+			print("finished block",b_i)
+			b_i+=1
 
 if __name__=="__main__":
 	#getBlockInformation(1)
 	jobs = []
-	args = 542
+	'''
 	for i in range(4):
 		jobs.append(Process(target=getBlockInformation, args=(args,)))
 		args-=1
+	'''
+	jobs.append(Process(target=findBlockUncle, args=(0,1500000,"uncle_1")))
+	jobs.append(Process(target=findBlockUncle, args=(1500001,3000000,"uncle_2")))
+	jobs.append(Process(target=findBlockUncle, args=(3000001,4500000,"uncle_3")))
+	jobs.append(Process(target=findBlockUncle, args=(4500001,5420000,"uncle_4")))
 
 	for j in jobs:
 		j.start()

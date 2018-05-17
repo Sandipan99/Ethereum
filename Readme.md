@@ -18,7 +18,7 @@ Here I have jotted down different aspects the ethereum block chain ---
 
 		2.2.2. geth-ipc: For this one needs to connect a geth client to the network which can be done by opening a terminal and executing the command "geth". This will create a file geth.ipc at /Users/sandipansikdar/Library/ethereum/. Now open a terminal and execute "geth attach ipc://Users/sandipansikdar/Library/ethereum/geth.ipc". Now on the console one can execute functions specified in https://github.com/ethereum/wiki/wiki/JavaScript-API#web3eth to mine information from the chain data.
 
-		2.2.3. A new library in python has been published Web3.py which is provides a python interface to the api discussed in 2.2.2
+		2.2.3. A new library in python has been published Web3.py which provides a python interface to the api discussed in 2.2.2
 		http://web3py.readthedocs.io/en/stable/quickstart.html
 
 	2.3. Since extracting data requires geth client to be online and is slow, it is not viable to use it for large scale experiments.
@@ -28,4 +28,4 @@ Here I have jotted down different aspects the ethereum block chain ---
 		2.3.2. "retrieve.py" defines several functions (the names are self explanatory) for retrieving informations related to a particular block. I plan to enrich it with more functions.
 
 		2.3.3. "transactions.py" creates a csv file which lists all the transactions across all the blocks including mining rewards.
-		2.3.4. Uncle rewards are stored separately using the getUncleRewards() function in build_data_base.py 
+		2.3.4. Uncle rewards are stored separately using the getUncleRewards() function in build_data_base.py
