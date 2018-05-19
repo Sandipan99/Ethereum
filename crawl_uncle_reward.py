@@ -50,8 +50,8 @@ def crawlUncleRewardbyAPI(fname_1,fname_2,apikey):
 
 if __name__=="__main__":
 
-    apikey_1 = 'C19E71NR6YREZD13TMVT454V7J2WI4MBQ4'
-    apikey_2 = '93IPXFHR1U5T29PT9NMQUTFS1M3NAR2335'
+    apikey_1 = 'api key'
+    apikey_2 = 'api key'
 
     jobs = []
     jobs.append(Process(target=crawlUncleRewardbyAPI, args=("uncle_r_1.csv","uncle_1",apikey_1,)))
