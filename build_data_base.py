@@ -121,12 +121,13 @@ if __name__=="__main__":
 		jobs.append(Process(target=getBlockInformation, args=(args,)))
 		args-=1
 	'''
-	jobs.append(Process(target=findBlockUncle, args=(0,1500000,"uncle_1")))
-	jobs.append(Process(target=findBlockUncle, args=(1500001,3000000,"uncle_2")))
-	jobs.append(Process(target=findBlockUncle, args=(3000001,4500000,"uncle_3")))
-	jobs.append(Process(target=findBlockUncle, args=(4500001,5420000,"uncle_4")))
+	findBlockUncle(0,1500000,"uncle_1")
+	#jobs.append(Process(target=findBlockUncle, args=(0,1500000,"uncle_1")))
+	#jobs.append(Process(target=findBlockUncle, args=(1500001,3000000,"uncle_2")))
+	#jobs.append(Process(target=findBlockUncle, args=(3000001,4500000,"uncle_3")))
+	#jobs.append(Process(target=findBlockUncle, args=(4500001,5420000,"uncle_4")))
 
-	for j in jobs:
-		j.start()
-	for j in jobs:
-		j.join()
+	#for j in jobs:
+	#	j.start()
+	#for j in jobs:
+	#	j.join()
