@@ -42,24 +42,48 @@ def crawlUncleRewardbyAPI(fname_1,fname_2,apikey):
                 p_g = requests.get(url_c)
                 p_g_j = p_g.json()
                 sum_ = 0
+                time = p_g_j['result']['timeStamp']
                 for obj in p_g_j['result']['uncles']:
-                    sum_+=float(obj['blockreward'])
-                ft.write("ethereum,"+temp[1]+","+str(sum_)+",0,"+temp[0])
-                ft.write("\n")
+                    miner = obj['miner'][2:]
+                    reward = obj['blockreward']
+                    ft.write("ethereum,"+miner+","+reward+","+time+","+temp[0])
+                    ft.write("\n")
+                #u_i_reward = p_g_j['result']['uncleInclusionReward']
                 print("parsed block",temp[0])
 
-if __name__=="__main__":
+def crawlUncleInclusionReward(fname_1,fname_2,apikey):
+    url = 'https://api.etherscan.io/api?module=block&action=getblockreward&blockno='
+    with open(fname_1,"a") as ft:
+        with open(fname_2) as fs:
+            for line in fs:
+                temp = line.strip().split(",")
+                if int(temp[0])>5326326:
+                    url_c = url+temp[0]+"&apikey="+apikey
+                    p_g = requests.get(url_c)
+                    p_g_j = p_g.json()
+                    sum_ = 0
+                    time = p_g_j['result']['timeStamp']
+                    u_i_reward = p_g_j['result']['uncleInclusionReward']
+                    ft.write("ethereum,"+temp[1]+","+u_i_reward+","+time+","+temp[0])
+                    ft.write("\n")
+                    #print("ethereum,"+temp[1]+","+u_i_reward+","+time+","+temp[0])
+                    print("parsed block",temp[0])
 
-    apikey_1 = 'api key'
-    apikey_2 = 'api key'
 
-    jobs = []
-    jobs.append(Process(target=crawlUncleRewardbyAPI, args=("uncle_r_1.csv","uncle_1",apikey_1,)))
-    jobs.append(Process(target=crawlUncleRewardbyAPI, args=("uncle_r_2.csv","uncle_2",apikey_2,)))
+def crawlUncleRewardbyAPIrs(fname_1,fname_2,apikey):
+    url = 'https://api.etherscan.io/api?module=block&action=getblockreward&blockno='
+    with open(fname_1,"a") as ft:
+        with open(fname_2) as fs:
+            for line in fs:
+                temp = line.strip().split(",")
+                if int(temp[0])>5173420:
+                    url_c = url+temp[0]+"&apikey="+apikey
+                    p_g = requests.get(url_c)
+                    p_g_j = p_g.json()
+                    sum_ = 0
+                    for obj in p_g_j['result']['uncles']:
+                        sum_+=float(obj['blockreward'])
+                    ft.write("ethereum,"+temp[1]+","+str(sum_)+",0,"+temp[0])
+                    ft.write("\n")
 
-
-    for j in jobs:
-        j.start()
-
-    for j in jobs:
-        j.join()
+                    print("parsed block",temp[0])
