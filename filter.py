@@ -1,5 +1,6 @@
 # this script filters transactions to a certain number of blocks
 import re
+import datetime
 
 def filterbyBlock(block):
     fname = "transaction_till_"+str(block)+".csv"
@@ -22,5 +23,12 @@ def filterbyTime(time):
                     if int(temp[3])<=time:
                         ft.write(line)
 
+
+def fromUnixtimetoDate(time):
+    return(datetime.datetime.fromtimestamp(int(time)).strftime('%Y-%m-%d'))
+
+    
+
 if __name__=="__main__":
-    filterbyBlock(100000)
+    year,month,day = map(int,fromUnixtimetoDate(1284101485).split('-'))
+    print (year,month,day)
