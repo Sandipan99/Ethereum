@@ -29,3 +29,5 @@ Here I have jotted down different aspects the ethereum block chain ---
 
 		2.3.3. "transactions.py" creates a csv file which lists all the transactions across all the blocks including mining rewards.
 		2.3.4. Uncle rewards are stored separately using the getUncleRewards() function in build_data_base.py
+		
+	2.4. External effects
