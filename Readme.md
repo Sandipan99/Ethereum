@@ -31,4 +31,4 @@ Here I have jotted down different aspects the ethereum block chain ---
 		2.3.4. Uncle rewards are stored separately using the getUncleRewards() function in build_data_base.py
 		
 	2.4. External effects
-	2.5. Error in balances
+	2.5. Error in balances...
