@@ -6,6 +6,8 @@ import networkx as nx
 import math
 import scipy
 from web3 import Web3, IPCProvider
+import time
+import datetime
 
 
 #Todo: The first transaction timestamp does not seem correct
@@ -13,11 +15,17 @@ from web3 import Web3, IPCProvider
 # %%
 transactions = pd.read_csv('transactions_nodate')
 wallets = transactions['From'].append(transactions['To'])
-wallets.nunique() #7880
+nWallets = wallets.nunique() #7880
 
 (l,b)=transactions.shape # l is the number of lines
 #set type of the transactions as float
 transactions.Value = transactions.Value.astype(float)
+
+#%%
+
+def dateToUnixTime(date):
+   return time.mktime(datetime.datetime.strptime(date, “%Y-%m-%d”).timetuple())
+
 #%%
 def snapshotAnalysis(snap):
     output = pd.Series([]) #save the computed statistical Data in a DataFrame
@@ -39,20 +47,17 @@ def snapshotAnalysis(snap):
     output = output.append(pd.Series([snap.Value.sum()/snap_len]), ignore_index=True)
     print(snap.describe())
     return output
-
-for i in range(0,15):
-    print(snapshotAnalysis(transactions[10000*i:10000*(i+1)]))
-
 #%%
 
 def userStat(usr, transSet):
-    output = pd.DataFrame({'First Transaction' : 0.0, 'Total Transactions' : 0, 'Total Transferred' : 0.0, 'Max Transferred':0.0, 'Avg Transferred':0.0, 'Most Frequent': '', 'Total Received' : 0.0, 'Avg Received': 0.0, 'Balance': 0.0}, index=[1])
+    output = pd.DataFrame({'First Transaction' : '', 'Total Transactions' : 0, 'Total Transferred' : 0.0, 'Max Transferred':0.0, 'Avg Transferred':0.0, 'Most Frequent': '', 'Total Received' : 0.0, 'Avg Received': 0.0, 'Balance': 0.0}, index=[1])
     sentTo = transSet[transSet.From == usr]
     receivedFrom = transSet[transSet.To == usr]
 
     #Todo get familiar with how to extract the date from the block
     allUsr = sentTo.append(receivedFrom,ignore_index = True)
-    #output.at[1,'First Transaction'] = allUsr.sort_values(by='Time').at[0,'Time']
+    output.at[1,'First Transaction'] = usr
+    # allUsr.sort_values(by='Time').at[0,'Time']
 
     #The number of transactions where the user was involved
     count = len(sentTo)
@@ -63,7 +68,11 @@ def userStat(usr, transSet):
     output.at[1,'Total Transferred'] = sentTo.Value.sum()
 
     #Maximum amount transferred
-    output.at[1,'Max Transferred'] = max(sentTo.Value)
+    if sentTo.empty:
+        output.at[1,'Max Transferred'] =  0.0
+    else:
+        output.at[1,'Max Transferred'] = max(sentTo.Value)
+
 
     #Average amount transferred to other accounts
     if not sentTo.empty:
@@ -75,7 +84,8 @@ def userStat(usr, transSet):
     for usr in sentTo.To.unique():
         numTrans.append((usr,uniq.count(usr)))
     numTrans = sorted(numTrans, key = lambda x: x[1],reverse = True)
-    output.at[1,'Most Frequent'] = numTrans[0]
+    if numTrans:
+        output.at[1,'Most Frequent'] = numTrans[0]
 
     #Total amount received by other accounts
     output.at[1,'Total Received'] = receivedFrom.Value.sum()
@@ -91,15 +101,15 @@ def userStat(usr, transSet):
 
     return output
 
-print(userStat('ethereum', transactions))
 
 #%%
-w3 = Web3(IPCProvider('/shakespeare/sandipan/Ethereum/.ethereum/geth.ipc'))
-w3.eth.getBlock('latest')
-df = pd.read_csv('transaction_till_100000.csv')
+#Make a list of all userStats for a certain period of time
+timeSet = transactions
+wallets = set(transactions['From'].append(transactions['To']))-set('ethereum')
+stats = pd.DataFrame({'First Transaction' : '', 'Total Transactions' : 0, 'Total Transferred' : 0.0, 'Max Transferred':0.0, 'Avg Transferred':0.0, 'Most Frequent': '', 'Total Received' : 0.0, 'Avg Received': 0.0, 'Balance': 0.0}, index=[1])
+for usr in wallets:
+    stats = stats.append(userStat(usr,timeSet), ignore_index = True)
+print(stats)
+stats.describe()
+stats.sort_values(by='Total Received')
 #%%
-add = df.From.unique()[1] #returns the second unique entry of the 'From' column
-add = Web3.toChecksumAddress(add)
-#extract all entries from the block with number 234
-df_b = df[df['Block']==234][['From','To','Block']]
-df.Value = df.Value.astype(float)
