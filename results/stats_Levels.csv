@@ -1,0 +1,5 @@
+Median: 4.000000
+ModeResult(mode=array([4]), count=array([5643141]))
+DescribeResult(nobs=18977703, minmax=(1, 10003), mean=9.678942599112231, variance=23182.0076676875, skewness=44.52889261231998, kurtosis=2193.364059648703)
+Standard Variance: 23182.006446
+Standard Deviation: 152.256384
