@@ -8,6 +8,7 @@ Here I have jotted down different aspects the ethereum block chain ---
 	1.2. Another way around is through packages available in python (pyethereum), C++ (cpp-ethereum), go (geth, app mentioned in 1.1 is a go implementation) and others. Installation procedures are described in the respective developer pages. I had initially installed pyethereum but failed to connect to the network and hence had to shift to geth.
 
 
+
 2. Exploring the chain ---
 
 	2.1. All information (live) related to the blockchain are maintained in the several websites. Most popular of them being etherscan.io
